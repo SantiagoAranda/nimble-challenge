@@ -28,12 +28,14 @@ export default function App() {
     );
   }
 
-
-
-return (
-  <div style={{ padding: 40 }}>
-    <h1>Welcome {candidate.firstName}</h1>
-    <JobsList uuid={candidate.uuid} candidateId={candidate.candidateId} />
-  </div>
-);
+  return (
+    <div style={{ padding: 40 }}>
+      <h1>Welcome {candidate.firstName}</h1>
+      <JobsList
+        uuid={candidate.uuid}
+        candidateId={candidate.candidateId}
+        applicationId={candidate.applicationId}
+      />
+    </div>
+  );
 }

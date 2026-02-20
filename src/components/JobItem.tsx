@@ -6,9 +6,10 @@ type Props = {
   job: Job;
   uuid: string;
   candidateId: string;
+  applicationId: string;
 };
 
-export default function JobItem({ job, uuid, candidateId }: Props) {
+export default function JobItem({ job, uuid, candidateId, applicationId }: Props) {
   const [repoUrl, setRepoUrl] = useState("");
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error"
@@ -20,12 +21,13 @@ export default function JobItem({ job, uuid, candidateId }: Props) {
     setMessage("");
 
     try {
-      await applyToJob({
-        uuid,
-        candidateId,
-        jobId: job.id,
-        repoUrl,
-      });
+        await applyToJob({
+            uuid,
+            candidateId,
+            applicationId,
+            jobId: job.id,
+            repoUrl,
+        });;
 
       setStatus("success");
       setMessage("Application sent!");
