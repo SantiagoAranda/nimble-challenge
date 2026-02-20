@@ -1,35 +1,39 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import EmailForm from "./components/EmailForm";
+import type { Candidate } from "./api/nimbleApi";
+import { getCandidateByEmail } from "./api/nimbleApi";
+import JobsList from "./components/JobList";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [candidate, setCandidate] = useState<Candidate | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+  async function handleEmail(email: string) {
+    setError(null);
+
+    try {
+      const data = await getCandidateByEmail(email);
+      setCandidate(data);
+    } catch (err: any) {
+      setError(err.message);
+    }
+  }
+
+  if (!candidate) {
+    return (
+      <div style={{ padding: 40 }}>
+        <EmailForm onSubmit={handleEmail} />
+        {error && <p style={{ color: "red" }}>{error}</p>}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    );
+  }
+
+
+
+return (
+  <div style={{ padding: 40 }}>
+    <h1>Welcome {candidate.firstName}</h1>
+    <JobsList uuid={candidate.uuid} candidateId={candidate.candidateId} />
+  </div>
+);
 }
-
-export default App
